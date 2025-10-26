@@ -168,5 +168,6 @@ tile_map_data = PackedByteArray("AAACACcAAQAHAAAAAAADACcAAQAHAAAAAAAEACcAAQAHAAA
 tile_set = SubResource("TileSet_0nd0b")
 
 [node name="TestPlayer" parent="." instance=ExtResource("2_p5wua")]
-position = Vector2(544, 83)
+position = Vector2(201.00002, 530.00006)
+rotation = 0.7853982
 mass = 0.15
