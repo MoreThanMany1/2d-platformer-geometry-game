@@ -10,8 +10,8 @@ extends RigidBody2D
 
 @export_group("Player Movement")
 @export var base_torque := 9000.0
-@export var jump_height := 1200.0
-@export var jump_length := 600.0
+@export var jump_height := 900.0
+@export var jump_length := 900.0
 @export var input_direction_pull := 0.5
 
 @export_group("Player Abilities")
@@ -81,9 +81,12 @@ func jump() -> void:
 	linear_velocity.x = direction_to_corner.x * jump_length
 	linear_velocity.y = direction_to_corner.y * jump_height
 	
+	await get_tree().create_timer(0.05).timeout
 	gravity_change(Vector2.DOWN)
 
 func stick() -> void:
+	if not on_ground():
+		return
 	for raycast in raycasts:
 		if raycast.is_colliding():
 			gravity_change(raycast.get_collision_point() - self.global_position)
