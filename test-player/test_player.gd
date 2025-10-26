@@ -2,6 +2,7 @@ extends RigidBody2D
 
 @export_group("Nodes")
 @export var Center : Node2D
+@onready var ground_raycasts = get_node("GroundRaycasts")
 
 @export_group("Input")
 @export var input_left := "move_left"
@@ -34,7 +35,6 @@ var current_torque : float
 
 var corners := []
 var raycasts := []
-@onready var ground_raycasts = get_node("GroundRaycasts")
 
 func _ready():
 	for child in Center.get_children():
@@ -95,10 +95,10 @@ func gravity_change(stick_direction : Vector2) -> void:
 	var closest_gravity_direction := Vector2.DOWN
 	
 	for possible_direction in possible_gravity_directions:
-		if abs(possible_direction - stick_direction).length() < closest_gravity_direction.length():
+		if (possible_direction - stick_direction).length() < 1:
 			closest_gravity_direction = possible_direction
 		
-	gravity_direction = closest_gravity_direction.normalized()
+	gravity_direction = closest_gravity_direction
 	gravity_angle = gravity_direction.angle() - deg_to_rad(90)
 
 func on_ground() -> bool:
