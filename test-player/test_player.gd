@@ -80,12 +80,11 @@ func jump() -> void:
 	
 	linear_velocity.x = direction_to_corner.x * jump_length
 	linear_velocity.y = direction_to_corner.y * jump_height
-	
-	await get_tree().create_timer(0.05).timeout
-	gravity_change(Vector2.DOWN)
 
 func stick() -> void:
 	if not on_ground():
+		if gravity_direction != Vector2.DOWN:
+			gravity_change(Vector2.DOWN)
 		return
 	for raycast in raycasts:
 		if raycast.is_colliding():
