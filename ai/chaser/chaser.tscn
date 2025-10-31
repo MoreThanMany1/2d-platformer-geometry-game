@@ -1,3 +1,74 @@
-[gd_scene format=3 uid="uid://c02nb3rq4dxlc"]
+[gd_scene load_steps=4 format=3 uid="uid://c02nb3rq4dxlc"]
 
-[node name="Chaser" type="Node2D"]
+[ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ewd13"]
+size = Vector2(64, 64)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
+
+[node name="Chaser" type="RigidBody2D"]
+script = ExtResource("1_nw1ig")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ewd13")
+debug_color = Color(0, 0.6, 0.69803923, 0.76862746)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -9.536743e-07)
+scale = Vector2(64, 64)
+texture = SubResource("CanvasTexture_tbp63")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Center" type="Node2D" parent="."]
+
+[node name="BottomLeft" type="Node2D" parent="Center"]
+position = Vector2(-32, 32)
+
+[node name="BottomRight" type="Node2D" parent="Center"]
+position = Vector2(32, 32)
+
+[node name="TopLeft" type="Node2D" parent="Center"]
+position = Vector2(-32, -32)
+
+[node name="TopRight" type="Node2D" parent="Center"]
+position = Vector2(32, -32)
+
+[node name="LeftRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(-48, 0)
+
+[node name="RightRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(48, 0)
+
+[node name="DownRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(0, 48)
+
+[node name="UpRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(0, -48)
+
+[node name="GroundRaycasts" type="Node2D" parent="."]
+
+[node name="RayCast2D" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(-30.999996, -31)
+rotation = 2.3561945
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D2" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(31, -31)
+rotation = -2.3561945
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D3" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(31, 31)
+rotation = -0.7853982
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D4" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(-31, 31)
+rotation = 0.7853982
+exclude_parent = false
+target_position = Vector2(0, 15)
