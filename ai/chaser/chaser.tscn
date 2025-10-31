@@ -1,73 +1,77 @@
-[gd_scene load_steps=4 format=3 uid="uid://c02nb3rq4dxlc"]
+[gd_scene load_steps=5 format=3 uid="uid://c02nb3rq4dxlc"]
 
-[ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
+[ext_resource type="Script" uid="uid://rvkr7ppvyq4k" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
+[ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser_body.gd" id="2_ewd13"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewd13"]
 size = Vector2(96, 96)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
 
-[node name="Chaser" type="RigidBody2D" node_paths=PackedStringArray("Center", "GroundRaycasts")]
+[node name="Chaser" type="Node2D"]
 script = ExtResource("1_nw1ig")
+
+[node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
+script = ExtResource("2_ewd13")
 Center = NodePath("Center")
 GroundRaycasts = NodePath("GroundRaycasts")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChaserBody"]
 shape = SubResource("RectangleShape2D_ewd13")
 debug_color = Color(0, 0.6, 0.69803923, 0.76862746)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="ChaserBody"]
 position = Vector2(0, -9.536743e-07)
 scale = Vector2(96, 96)
 texture = SubResource("CanvasTexture_tbp63")
 
-[node name="Center" type="Node2D" parent="."]
+[node name="Center" type="Node2D" parent="ChaserBody"]
 
-[node name="BottomLeft" type="Node2D" parent="Center"]
+[node name="BottomLeft" type="Node2D" parent="ChaserBody/Center"]
 position = Vector2(-48, 48)
 
-[node name="BottomRight" type="Node2D" parent="Center"]
+[node name="BottomRight" type="Node2D" parent="ChaserBody/Center"]
 position = Vector2(-48, 48)
 
-[node name="TopLeft" type="Node2D" parent="Center"]
+[node name="TopLeft" type="Node2D" parent="ChaserBody/Center"]
 position = Vector2(-48, 48)
 
-[node name="TopRight" type="Node2D" parent="Center"]
+[node name="TopRight" type="Node2D" parent="ChaserBody/Center"]
 position = Vector2(48, -48)
 
-[node name="LeftRaycast" type="RayCast2D" parent="Center"]
+[node name="LeftRaycast" type="RayCast2D" parent="ChaserBody/Center"]
 target_position = Vector2(-72, 0)
 
-[node name="RightRaycast" type="RayCast2D" parent="Center"]
+[node name="RightRaycast" type="RayCast2D" parent="ChaserBody/Center"]
 target_position = Vector2(72, 0)
 
-[node name="DownRaycast" type="RayCast2D" parent="Center"]
+[node name="DownRaycast" type="RayCast2D" parent="ChaserBody/Center"]
 target_position = Vector2(0, 72)
 
-[node name="UpRaycast" type="RayCast2D" parent="Center"]
+[node name="UpRaycast" type="RayCast2D" parent="ChaserBody/Center"]
 target_position = Vector2(0, -72)
 
-[node name="GroundRaycasts" type="Node2D" parent="."]
+[node name="GroundRaycasts" type="Node2D" parent="ChaserBody"]
 
-[node name="RayCast2D" type="RayCast2D" parent="GroundRaycasts"]
+[node name="RayCast2D" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(-46.5, -46.5)
 rotation = 2.3561945
 exclude_parent = false
 target_position = Vector2(0, 22.5)
 
-[node name="RayCast2D2" type="RayCast2D" parent="GroundRaycasts"]
+[node name="RayCast2D2" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, -46.5)
 rotation = -2.3561945
 exclude_parent = false
 target_position = Vector2(0, 22.5)
 
-[node name="RayCast2D3" type="RayCast2D" parent="GroundRaycasts"]
+[node name="RayCast2D3" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, 46.5)
 rotation = -0.7853982
 exclude_parent = false
 target_position = Vector2(0, 22.5)
 
-[node name="RayCast2D4" type="RayCast2D" parent="GroundRaycasts"]
+[node name="RayCast2D4" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(-46.5, 46.5)
 rotation = 0.7853982
 exclude_parent = false
