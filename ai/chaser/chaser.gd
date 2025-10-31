@@ -2,7 +2,7 @@ extends RigidBody2D
 
 @export_group("Nodes")
 @export var Center : Node2D
-@onready var GroundRaycasts : Node2D
+@export var GroundRaycasts : Node2D
 
 @export_group("Input")
 @export var input_left := 0.0
@@ -81,11 +81,11 @@ func jump() -> void:
 	linear_velocity.x = direction_to_corner.x * jump_length
 	linear_velocity.y = direction_to_corner.y * jump_height
 	
-	await get_tree().create_timer(0.05).timeout
-	gravity_change(Vector2.DOWN)
 
 func stick() -> void:
 	if not on_ground():
+		if gravity_direction != Vector2.DOWN:
+			gravity_change(Vector2.DOWN)
 		return
 	for raycast in raycasts:
 		if raycast.is_colliding():

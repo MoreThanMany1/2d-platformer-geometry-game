@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=4 uid="uid://b2nnryp8opnje"]
+[gd_scene load_steps=6 format=4 uid="uid://b2nnryp8opnje"]
 
 [ext_resource type="Texture2D" uid="uid://d1to2yv0vvley" path="res://art/tilemaps/Terrain (16x16).png" id="1_wpvgo"]
 [ext_resource type="PackedScene" uid="uid://c7r0ibc0i2vdy" path="res://test-player/test-player.tscn" id="2_p5wua"]
+[ext_resource type="PackedScene" uid="uid://c02nb3rq4dxlc" path="res://ai/chaser/chaser.tscn" id="3_0nd0b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wpvgo"]
 texture = ExtResource("1_wpvgo")
@@ -174,3 +175,6 @@ tile_set = SubResource("TileSet_0nd0b")
 [node name="TestPlayer" parent="." instance=ExtResource("2_p5wua")]
 position = Vector2(201.00002, 530.00006)
 mass = 0.15
+
+[node name="Chaser" parent="." instance=ExtResource("3_0nd0b")]
+position = Vector2(303, 205.00002)
