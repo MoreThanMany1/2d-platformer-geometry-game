@@ -4,6 +4,11 @@ extends RigidBody2D
 @export var Center : Node2D
 @onready var GroundRaycasts : Node2D
 
+@export_group("Input")
+@export var input_left := 0.0
+@export var input_right := 0.0
+@export var input_jump := false
+
 @export_group("Chaser Movement")
 @export var base_torque := 9000.0
 @export var jump_height := 900.0
@@ -42,12 +47,12 @@ func _physics_process(_delta: float) -> void:
 	if not can_move:
 		return
 	
-	input_direction = Input.get_axis(input_left, input_right)
+	input_direction = input_left - input_right
 	current_torque = lerp(current_torque, input_direction * base_torque, input_direction_pull)
 	
 	stick()
 	
-	if Input.is_action_just_pressed(input_jump) && on_ground():
+	if input_jump && on_ground():
 		jump()
 
 func _integrate_forces(state):
@@ -100,7 +105,7 @@ func gravity_change(stick_direction : Vector2) -> void:
 	gravity_angle = gravity_direction.angle() - deg_to_rad(90)
 
 func on_ground() -> bool:
-	for ray in ground_raycasts.get_children():
+	for ray in GroundRaycasts.get_children():
 		if ray.is_colliding():
 			return true
 	return false
