@@ -8,8 +8,9 @@ size = Vector2(96, 96)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
 
-[node name="Chaser" type="Node2D"]
+[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody")]
 script = ExtResource("1_nw1ig")
+ChaserBody = NodePath("ChaserBody")
 
 [node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
 script = ExtResource("2_ewd13")
