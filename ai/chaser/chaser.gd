@@ -12,6 +12,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func send_input(input : Vector2):
+	ChaserBody.input_left = input.x
+	ChaserBody.input_right = input.y
 	
 	
 	
