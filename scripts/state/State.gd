@@ -1,14 +1,13 @@
 extends Node
 class_name State
 
-func Enter():
+var Owner : Node
+
+func enter():
 	pass
 
-func Exit():
+func exit():
 	pass
 
-func Update(_delta : float):
-	pass
-
-func PhysicsUpdate(_delta: float):
+func _physics_process(delta: float) -> void:
 	pass
