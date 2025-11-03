@@ -57,8 +57,8 @@ func _physics_process(_delta: float) -> void:
 
 func _integrate_forces(state):
 	state.linear_velocity += gravity_direction * gravity_strength * state.step
-	state.angular_velocity -= state.angular_velocity * angular_damping * state.step
 	
+	state.angular_velocity -= state.angular_velocity * angular_damping * state.step
 	state.angular_velocity += current_torque * state.inverse_inertia * state.step
 	state.angular_velocity = clamp(state.angular_velocity, -angular_velo_clamping, angular_velo_clamping)
 

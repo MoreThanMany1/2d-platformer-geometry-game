@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwkf6hfdmu2ym"]
+
+[ext_resource type="Script" uid="uid://b2i51jxfourf7" path="res://ai/npc-neutral-runner/npc-neutral-runner.gd" id="1_ay5q4"]
+[ext_resource type="Script" uid="uid://ewj0ypfq3tjs" path="res://ai/npc-neutral-runner/states/idle.gd" id="2_it4p1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d7e6n"]
+size = Vector2(24, 24)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_tmtbt"]
+
+[node name="NpcNeutralRunner" type="RigidBody2D" node_paths=PackedStringArray("initial_state")]
+collision_layer = 2
+mass = 0.1
+custom_integrator = true
+script = ExtResource("1_ay5q4")
+initial_state = NodePath("StateMachine/Idle")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_d7e6n")
+debug_color = Color(0, 0.6, 0.69803923, 0.76862746)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -9.536743e-07)
+scale = Vector2(23.999998, 23.999998)
+texture = SubResource("CanvasTexture_tmtbt")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Center" type="Node2D" parent="."]
+
+[node name="BottomLeft" type="Node2D" parent="Center"]
+position = Vector2(-12, 12)
+
+[node name="BottomRight" type="Node2D" parent="Center"]
+position = Vector2(12, 12)
+
+[node name="TopLeft" type="Node2D" parent="Center"]
+position = Vector2(-12, -12)
+
+[node name="TopRight" type="Node2D" parent="Center"]
+position = Vector2(12, -12)
+
+[node name="LeftRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(-24, 0)
+
+[node name="RightRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(24, 0)
+
+[node name="DownRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(0, 24)
+
+[node name="UpRaycast" type="RayCast2D" parent="Center"]
+target_position = Vector2(0, -24)
+
+[node name="GroundRaycasts" type="Node2D" parent="."]
+
+[node name="RayCast2D" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(-11, -11)
+rotation = 2.3561945
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D2" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(11, -10.999999)
+rotation = -2.3561945
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D3" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(11.000001, 11.000001)
+rotation = -0.7853982
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="RayCast2D4" type="RayCast2D" parent="GroundRaycasts"]
+position = Vector2(-11.000001, 11.000001)
+rotation = 0.7853982
+exclude_parent = false
+target_position = Vector2(0, 15)
+
+[node name="StateMachine" type="Node" parent="."]
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("2_it4p1")
