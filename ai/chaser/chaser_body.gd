@@ -52,7 +52,7 @@ func _physics_process(_delta: float) -> void:
 	
 	stick()
 	
-	if input_jump && on_ground():
+	if input_jump and on_ground():
 		jump()
 
 func _integrate_forces(state):

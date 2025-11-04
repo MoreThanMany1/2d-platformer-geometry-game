@@ -8,14 +8,8 @@ extends Node2D
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func send_input(input : Vector2):
-	ChaserBody.input_left = input.x
-	ChaserBody.input_right = input.y
+func send_input(direction : Vector2, jump : bool):
+	ChaserBody.input_left = direction.x
+	ChaserBody.input_right = direction.y
 	
-	
-	
+	ChaserBody.input_jump = jump

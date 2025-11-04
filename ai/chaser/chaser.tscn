@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c02nb3rq4dxlc"]
+[gd_scene load_steps=8 format=3 uid="uid://c02nb3rq4dxlc"]
 
 [ext_resource type="Script" uid="uid://rvkr7ppvyq4k" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
 [ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser_body.gd" id="2_ewd13"]
 [ext_resource type="Script" uid="uid://dvkytgl7lf05a" path="res://scripts/state/StateMachine.gd" id="3_tbp63"]
-[ext_resource type="Script" uid="uid://32cm8jv18418" path="res://scripts/state/State.gd" id="4_a67ss"]
+[ext_resource type="Script" uid="uid://rktfck0p8plo" path="res://ai/chaser/idle.gd" id="4_a67ss"]
+[ext_resource type="Script" uid="uid://32cm8jv18418" path="res://scripts/state/State.gd" id="5_x2vgj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewd13"]
 size = Vector2(96, 96)
@@ -82,10 +83,18 @@ target_position = Vector2(0, 22.5)
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("Owner", "StartingState")]
 script = ExtResource("3_tbp63")
-Owner = NodePath("..")
-StartingState = NodePath("State")
+Owner = NodePath("../ChaserBody")
+StartingState = NodePath("Idle")
 metadata/_custom_type_script = "uid://dvkytgl7lf05a"
 
-[node name="State" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("4_a67ss")
+metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="Chase" type="Node" parent="StateMachine"]
+script = ExtResource("5_x2vgj")
+metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="Random" type="Node" parent="StateMachine"]
+script = ExtResource("5_x2vgj")
 metadata/_custom_type_script = "uid://32cm8jv18418"

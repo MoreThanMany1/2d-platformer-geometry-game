@@ -12,6 +12,7 @@ func _ready() -> void:
 		if child is State:
 			states[child.name] = child
 			child.Owner = Owner
+			child.StateController = self
 	
 	if StartingState:
 		current_state = StartingState
