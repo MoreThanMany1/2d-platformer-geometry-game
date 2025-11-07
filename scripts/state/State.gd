@@ -5,6 +5,10 @@ class_name State
 @export var Owner : Node
 @export var StateController : Node
 
+@export_group("Defaults")
+@export var direction := Vector2.ZERO
+@export var jump := false
+
 @export_group("Active")
 @export var active := false
 
