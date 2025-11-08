@@ -7,8 +7,18 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if Owner.recent_direction != direction or Owner.recent_jump != jump:
+		randomize_input()
 
 func randomize_input():
-	pass
+	if rng_boolean() == true:
+		direction = left
+	else:
+		direction = right
+	
+	if rng() > 0.95:
+		jump = true
+		
+	
+	
 	
