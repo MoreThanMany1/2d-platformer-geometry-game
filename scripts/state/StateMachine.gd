@@ -15,13 +15,14 @@ func _ready() -> void:
 			child.StateController = self
 	
 	if StartingState:
-		current_state = StartingState
+		change_state(StartingState)
 	else:
 		push_error(str( get_path() ) + ": No starting state")
 
 func change_state(new_state : State) -> void:
-	current_state.exit()
+	if current_state:
+		current_state.exit()
+		
 	new_state.enter()
-	
 	current_state = new_state
 	

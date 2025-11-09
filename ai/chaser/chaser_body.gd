@@ -7,6 +7,7 @@ extends RigidBody2D
 @export_group("Input")
 @export var input_left := 0.0
 @export var input_right := 0.0
+@export var input_direction_multiplier := 3.0
 @export var input_jump := false
 
 @export_group("Chaser Movement")
@@ -47,7 +48,7 @@ func _physics_process(_delta: float) -> void:
 	if not can_move:
 		return
 	
-	input_direction = input_left - input_right
+	input_direction = (input_left - input_right) * input_direction_multiplier
 	current_torque = lerp(current_torque, input_direction * base_torque, input_direction_pull)
 	
 	stick()
@@ -67,10 +68,10 @@ func jump() -> void:
 	if not can_jump:
 		return
 	
-	var highest_corner_position = Vector2(Center.global_position.x, Center.global_position.y - 32)
+	var highest_corner_position = Vector2(Center.global_position.x, Center.global_position.y - 48)
 	
 	for corner in corners:
-		if abs(corner.global_position.y - (Center.global_position.y - 32)) < 1.0:
+		if abs(corner.global_position.y - (Center.global_position.y - 48)) < 1.0:
 			pass
 		elif corner.global_position.y < highest_corner_position.y:
 			highest_corner_position = corner.global_position

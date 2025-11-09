@@ -10,8 +10,8 @@ class_name State
 @export var jump := false
 
 @export_group("Default Movement")
-@export var right := Vector2.RIGHT
-@export var left := Vector2.LEFT
+@export var right_input := Vector2(0, 1)
+@export var left_input:= Vector2(1, 0)
 
 @export_group("Ranodmization")
 @export var random := 0

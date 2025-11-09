@@ -17,6 +17,9 @@ script = ExtResource("1_nw1ig")
 ChaserBody = NodePath("ChaserBody")
 
 [node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
+collision_layer = 2
+mass = 0.25
+custom_integrator = true
 script = ExtResource("2_ewd13")
 Center = NodePath("Center")
 GroundRaycasts = NodePath("GroundRaycasts")
@@ -84,8 +87,8 @@ target_position = Vector2(0, 22.5)
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("Owner", "StartingState")]
 script = ExtResource("3_tbp63")
-Owner = NodePath("../ChaserBody")
-StartingState = NodePath("Idle")
+Owner = NodePath("..")
+StartingState = NodePath("Random")
 metadata/_custom_type_script = "uid://dvkytgl7lf05a"
 
 [node name="Idle" type="Node" parent="StateMachine"]
@@ -96,6 +99,13 @@ metadata/_custom_type_script = "uid://32cm8jv18418"
 script = ExtResource("5_t30d3")
 metadata/_custom_type_script = "uid://32cm8jv18418"
 
-[node name="Random" type="Node" parent="StateMachine"]
+[node name="Random" type="Node" parent="StateMachine" node_paths=PackedStringArray("RandomTimer")]
 script = ExtResource("6_0cdvt")
+RandomTimer = NodePath("RandomTimer")
 metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="RandomTimer" type="Timer" parent="StateMachine/Random"]
+wait_time = 1.5
+autostart = true
+
+[connection signal="timeout" from="StateMachine/Random/RandomTimer" to="StateMachine/Random" method="_on_timer_timeout"]
