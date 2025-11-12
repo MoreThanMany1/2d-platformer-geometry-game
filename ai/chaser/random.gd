@@ -15,16 +15,18 @@ func _process(delta: float) -> void:
 	Owner.send_input(direction, jump)
 
 func randomize_input():
-	if rng_boolean():
-		direction = left_input
-	else:
-		direction = right_input
-	
 	if rng() < 0.8:
 		jump = false
 	else:
 		jump = true
-		direction = Vector2.ZERO
+	
+	if jump:
+		return
+	
+	if rng_boolean():
+		direction = left_input
+	else:
+		direction = right_input
 		
 
 func _on_timer_timeout() -> void:
