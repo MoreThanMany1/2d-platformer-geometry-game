@@ -4,6 +4,9 @@ extends RigidBody2D
 @export var Center : Node2D
 @onready var ground_raycasts = get_node("GroundRaycasts")
 
+@export_group("Groups")
+@export var player_group := "player"
+
 @export_group("Input")
 @export var input_left := "move_left"
 @export var input_right := "move_right"
@@ -37,6 +40,8 @@ var corners := []
 var raycasts := []
 
 func _ready():
+	add_to_group(player_group)
+	
 	for child in Center.get_children():
 		if child is RayCast2D:
 			raycasts.append(child)
