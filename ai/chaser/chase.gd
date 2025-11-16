@@ -29,4 +29,4 @@ func update_chaser_position() -> void:
 	body_rotation = ChaserBody.rotation_degrees
 
 func roll_after_player():
-	pass #Determine if the player is left or right of the chaser, and roll in that direction
+	pass #Determine if the player is left or right of the chaser, and roll in that direction (me sleepy so this is reminder lol)
