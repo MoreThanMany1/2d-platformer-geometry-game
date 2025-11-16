@@ -95,8 +95,9 @@ metadata/_custom_type_script = "uid://dvkytgl7lf05a"
 script = ExtResource("4_a67ss")
 metadata/_custom_type_script = "uid://32cm8jv18418"
 
-[node name="Chase" type="Node" parent="StateMachine"]
+[node name="Chase" type="Node" parent="StateMachine" node_paths=PackedStringArray("ChaserBody")]
 script = ExtResource("5_t30d3")
+ChaserBody = NodePath("../../ChaserBody")
 metadata/_custom_type_script = "uid://32cm8jv18418"
 
 [node name="Random" type="Node" parent="StateMachine" node_paths=PackedStringArray("RandomTimer")]
