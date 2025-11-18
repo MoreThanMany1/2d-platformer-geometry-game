@@ -19,16 +19,28 @@ class_name State
 @export_group("Active")
 @export var active := false
 
+func _ready() -> void:
+	if not active:
+		exit()
+
 func enter():
 	activation(true)
+	on_enter()
 
 func exit():
 	activation(false)
+	on_exit()
 
 func activation(activate : bool):
 	active = activate
 	set_process(activate)
 	set_physics_process(activate)
+
+func on_enter() -> void:
+	pass
+
+func on_exit() -> void:
+	pass
 
 func rng():
 	return randf()
@@ -38,4 +50,6 @@ func rng_boolean():
 		return true
 	else:
 		return false
+
+
 	

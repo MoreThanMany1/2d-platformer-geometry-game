@@ -2,12 +2,12 @@ extends State
 
 @export var RandomTimer : Timer
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func on_enter() -> void:
+	RandomTimer.start()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func on_exit() -> void:
+	RandomTimer.stop()
+	
 func _process(delta: float) -> void:
 	if Owner.recent_direction == direction and Owner.recent_jump == jump:
 		return
@@ -30,6 +30,9 @@ func randomize_input():
 		
 
 func _on_timer_timeout() -> void:
+	if not active:
+		return
+		
 	randomize_input()
 	
 	if jump == true:
