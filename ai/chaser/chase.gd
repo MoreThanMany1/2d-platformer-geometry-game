@@ -45,6 +45,7 @@ func _process(delta: float) -> void:
 
 func roll_towards_player():
 	update_positions()
+	jump_towards_player()
 	
 	if position_to_player.x > still_range:
 		direction = right_input
@@ -58,10 +59,17 @@ func roll_towards_player():
 	if abs(position_to_player) > abs(old_position_to_player):
 		direction = direction * -1
 
-func jump_on_rotation(degrees, degree_range) -> void:
+func jump_towards_player() -> void:
 	update_positions()
 	
-	if abs ( abs(degrees_to_player) - abs(body_rotation) ) > degree_range:
+	var degrees_for_jump : float
+
+	degrees_for_jump = abs(degrees_to_player)
+	
+	jump_on_rotation(abs(degrees_for_jump), 10)
+
+func jump_on_rotation(degrees, degree_range) -> void:
+	if abs(body_rotation - degrees) <= degree_range:
 		jump = true
 	else:
 		jump = false
