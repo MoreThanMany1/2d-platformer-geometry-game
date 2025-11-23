@@ -13,6 +13,7 @@ extends State
 #Player tracking
 var Player : RigidBody2D
 var player_position : Vector2
+var player_gravity : Vector2
 var position_to_player : Vector2
 var angle_to_player : float
 var degrees_to_player : float
@@ -20,6 +21,8 @@ var degrees_to_player : float
 #Chaser body tracking
 var body_position : Vector2
 var body_rotation : float
+var body_gravity : Vector2
+
 
 func on_enter() -> void:
 	RollTimer.wait_time = roll_timer_length
@@ -38,55 +41,41 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	update_positions()
+	
 	if Owner.recent_direction == direction and Owner.recent_jump == jump:
 		return
 	
 	Owner.send_input(direction, jump)
 
 func roll_towards_player():
-	update_positions()
-	jump_towards_player()
-	
 	if position_to_player.x > still_range:
-		direction = right_input
-	elif position_to_player.x < -still_range:
 		direction = left_input
-	
-	var old_position_to_player := position_to_player
-	
-	update_positions()
-	
-	if abs(position_to_player) > abs(old_position_to_player):
-		direction = direction * -1
+	elif position_to_player.x < -still_range:
+		direction = right_input
 
 func jump_towards_player() -> void:
-	update_positions()
-	
-	var degrees_for_jump : float
-
-	degrees_for_jump = abs(degrees_to_player)
-	
-	jump_on_rotation(abs(degrees_for_jump), 10)
+	jump_on_rotation(abs(degrees_to_player), 10)
 
 func jump_on_rotation(degrees, degree_range) -> void:
 	if abs(body_rotation - degrees) <= degree_range:
 		jump = true
+		print(degrees_to_player)
+		print(body_rotation)
 	else:
 		jump = false
-
-func update_positions() -> void:
-	update_player_position()
-	update_chaser_position()
 	
-func update_player_position() -> void:
-	player_position = Player.global_position
-	position_to_player = body_position - player_position
-	angle_to_player = position_to_player.angle()
-	degrees_to_player = rad_to_deg(angle_to_player)
-
-func update_chaser_position() -> void:
+func update_positions() -> void:
 	body_position = ChaserBody.global_position
 	body_rotation = ChaserBody.rotation_degrees
+	body_gravity = ChaserBody.gravity_direction
+	
+	player_position = Player.global_position
+	player_gravity = Player.gravity_direction
+	
+	position_to_player = player_position - body_position
+	angle_to_player = position_to_player.angle()
+	degrees_to_player = rad_to_deg(angle_to_player)
 	
 	
 func _on_roll_timer_timeout() -> void:
