@@ -55,7 +55,7 @@ func roll_towards_player():
 		direction = right_input
 
 func jump_towards_player() -> void:
-	jump_on_rotation(abs(degrees_to_player), 10)
+	jump_on_rotation(abs(degrees_to_player), (still_range * 10))
 
 func jump_on_rotation(degrees, degree_range) -> void:
 	if abs(body_rotation - degrees) <= degree_range:
