@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cwkf6hfdmu2ym"]
+[gd_scene load_steps=6 format=3 uid="uid://cwkf6hfdmu2ym"]
 
 [ext_resource type="Script" uid="uid://b2i51jxfourf7" path="res://ai/npc-neutral-runner/npc-neutral-runner.gd" id="1_ay5q4"]
 [ext_resource type="Script" uid="uid://ewj0ypfq3tjs" path="res://ai/npc-neutral-runner/states/idle.gd" id="2_it4p1"]
@@ -8,12 +8,17 @@ size = Vector2(24, 24)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tmtbt"]
 
-[node name="NpcNeutralRunner" type="RigidBody2D" node_paths=PackedStringArray("initial_state")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_u2i5y"]
+radius = 282.00708
+
+[node name="NpcNeutralRunner" type="RigidBody2D"]
 collision_layer = 2
+collision_mask = 3
 mass = 0.1
 custom_integrator = true
 script = ExtResource("1_ay5q4")
-initial_state = NodePath("StateMachine/Idle")
+gravity_strength = null
+gravity_direction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_d7e6n")
@@ -23,8 +28,6 @@ debug_color = Color(0, 0.6, 0.69803923, 0.76862746)
 position = Vector2(0, -9.536743e-07)
 scale = Vector2(23.999998, 23.999998)
 texture = SubResource("CanvasTexture_tmtbt")
-
-[node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Center" type="Node2D" parent="."]
 
@@ -82,3 +85,11 @@ target_position = Vector2(0, 15)
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("2_it4p1")
+
+[node name="PlayerDetection" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
+shape = SubResource("CircleShape2D_u2i5y")
+
+[connection signal="body_entered" from="PlayerDetection" to="StateMachine/Idle" method="_on_player_detection_body_entered"]
