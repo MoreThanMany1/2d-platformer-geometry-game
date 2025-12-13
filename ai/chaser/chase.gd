@@ -41,7 +41,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	update_positions()
+	update_positions() #Will update this so it doesn't have to run every frame
 	
 	if Owner.recent_direction == direction and Owner.recent_jump == jump:
 		return
@@ -49,6 +49,7 @@ func _process(delta: float) -> void:
 	Owner.send_input(direction, jump)
 
 func roll_towards_player():
+	closest_wall_to_player()
 	if position_to_player.x > still_range:
 		direction = left_input
 	elif position_to_player.x < -still_range:
@@ -76,7 +77,19 @@ func update_positions() -> void:
 	position_to_player = player_position - body_position
 	angle_to_player = position_to_player.angle()
 	degrees_to_player = rad_to_deg(angle_to_player)
+
+func closest_wall_to_player() -> float:
+	update_positions()
+	var detected_walls = await Owner.check_for_walls()
+	var closest_wall = detected_walls[0]
 	
+	for wall in detected_walls:
+		if wall.distance_squared_to(player_position) < closest_wall.distance_squared_to(player_position):
+			closest_wall = wall
+	
+	var degrees_to_closest_wall := rad_to_deg((closest_wall - body_position).angle())
+	
+	return degrees_to_closest_wall
 	
 func _on_roll_timer_timeout() -> void:
 	if not active:
