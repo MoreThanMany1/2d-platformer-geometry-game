@@ -1,4 +1,4 @@
-extends State
+extends ChaserState
 
 @export var RandomTimer : Timer
 

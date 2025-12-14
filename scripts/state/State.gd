@@ -1,5 +1,5 @@
 extends Node
-class_name State
+class_name ChaserState
 
 @export_group("Node Connections")
 @export var Owner : Node

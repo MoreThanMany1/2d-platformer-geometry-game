@@ -1,4 +1,4 @@
-extends State
+extends ChaserState
 
 @export_group("Chaser")
 @export var ChaserBody : RigidBody2D

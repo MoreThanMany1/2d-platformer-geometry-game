@@ -1,0 +1,128 @@
+[gd_scene load_steps=9 format=3 uid="uid://c02nb3rq4dxlc"]
+
+[ext_resource type="Script" uid="uid://rvkr7ppvyq4k" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
+[ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser_body.gd" id="2_ewd13"]
+[ext_resource type="Script" uid="uid://buj63ksrxgxyf" path="res://ai/chaser/chaser_state_machine.gd" id="3_t30d3"]
+[ext_resource type="Script" uid="uid://rktfck0p8plo" path="res://ai/chaser/idle.gd" id="4_a67ss"]
+[ext_resource type="Script" uid="uid://ca06af4hk51v5" path="res://ai/chaser/chase.gd" id="5_t30d3"]
+[ext_resource type="Script" uid="uid://c8vti6k5v4kb1" path="res://ai/chaser/random.gd" id="6_0cdvt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ewd13"]
+size = Vector2(96, 96)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
+
+[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast")]
+script = ExtResource("1_nw1ig")
+ChaserBody = NodePath("ChaserBody")
+WallCast = NodePath("WallCast")
+
+[node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
+collision_layer = 2
+mass = 0.25
+custom_integrator = true
+script = ExtResource("2_ewd13")
+Center = NodePath("Center")
+GroundRaycasts = NodePath("GroundRaycasts")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChaserBody"]
+shape = SubResource("RectangleShape2D_ewd13")
+debug_color = Color(0, 0.6, 0.69803923, 0.76862746)
+
+[node name="Sprite2D" type="Sprite2D" parent="ChaserBody"]
+position = Vector2(0, -9.536743e-07)
+scale = Vector2(96, 96)
+texture = SubResource("CanvasTexture_tbp63")
+
+[node name="Center" type="Node2D" parent="ChaserBody"]
+
+[node name="BottomLeft" type="Node2D" parent="ChaserBody/Center"]
+position = Vector2(-48, 48)
+
+[node name="BottomRight" type="Node2D" parent="ChaserBody/Center"]
+position = Vector2(48, 48)
+
+[node name="TopLeft" type="Node2D" parent="ChaserBody/Center"]
+position = Vector2(-48, -48)
+
+[node name="TopRight" type="Node2D" parent="ChaserBody/Center"]
+position = Vector2(48, -48)
+
+[node name="LeftRaycast" type="RayCast2D" parent="ChaserBody/Center"]
+target_position = Vector2(-72, 0)
+
+[node name="RightRaycast" type="RayCast2D" parent="ChaserBody/Center"]
+target_position = Vector2(72, 0)
+
+[node name="DownRaycast" type="RayCast2D" parent="ChaserBody/Center"]
+target_position = Vector2(0, 72)
+
+[node name="UpRaycast" type="RayCast2D" parent="ChaserBody/Center"]
+target_position = Vector2(0, -72)
+
+[node name="GroundRaycasts" type="Node2D" parent="ChaserBody"]
+
+[node name="RayCast2D" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
+position = Vector2(-46.5, -46.5)
+rotation = 2.3561945
+exclude_parent = false
+target_position = Vector2(0, 22.5)
+
+[node name="RayCast2D2" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
+position = Vector2(46.5, -46.5)
+rotation = -2.3561945
+exclude_parent = false
+target_position = Vector2(0, 22.5)
+
+[node name="RayCast2D3" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
+position = Vector2(46.5, 46.5)
+rotation = -0.7853982
+exclude_parent = false
+target_position = Vector2(0, 22.5)
+
+[node name="RayCast2D4" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
+position = Vector2(-46.5, 46.5)
+rotation = 0.7853982
+exclude_parent = false
+target_position = Vector2(0, 22.5)
+
+[node name="ChaserStateMachine" type="Node" parent="." node_paths=PackedStringArray("StateTimer", "ChaserBody", "Owner", "StartingState")]
+script = ExtResource("3_t30d3")
+StateTimer = NodePath("StateTimer")
+ChaserBody = NodePath("../ChaserBody")
+Owner = NodePath("..")
+StartingState = NodePath("Idle")
+metadata/_custom_type_script = "uid://dvkytgl7lf05a"
+
+[node name="Idle" type="Node" parent="ChaserStateMachine"]
+script = ExtResource("4_a67ss")
+metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="Chase" type="Node" parent="ChaserStateMachine" node_paths=PackedStringArray("ChaserBody", "RollTimer")]
+script = ExtResource("5_t30d3")
+ChaserBody = NodePath("../../ChaserBody")
+RollTimer = NodePath("RollTimer")
+metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="RollTimer" type="Timer" parent="ChaserStateMachine/Chase"]
+wait_time = 0.1
+one_shot = true
+
+[node name="Random" type="Node" parent="ChaserStateMachine" node_paths=PackedStringArray("RandomTimer")]
+script = ExtResource("6_0cdvt")
+RandomTimer = NodePath("RandomTimer")
+metadata/_custom_type_script = "uid://32cm8jv18418"
+
+[node name="RandomTimer" type="Timer" parent="ChaserStateMachine/Random"]
+wait_time = 0.2
+one_shot = true
+
+[node name="StateTimer" type="Timer" parent="ChaserStateMachine"]
+autostart = true
+
+[node name="WallCast" type="RayCast2D" parent="."]
+target_position = Vector2(0, -600)
+
+[connection signal="timeout" from="ChaserStateMachine/Chase/RollTimer" to="ChaserStateMachine/Chase" method="_on_roll_timer_timeout"]
+[connection signal="timeout" from="ChaserStateMachine/Random/RandomTimer" to="ChaserStateMachine/Random" method="_on_timer_timeout"]
+[connection signal="timeout" from="ChaserStateMachine/StateTimer" to="ChaserStateMachine" method="_on_state_timer_timeout"]
