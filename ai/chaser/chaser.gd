@@ -32,7 +32,7 @@ func check_for_walls() -> Array:
 	
 	if WallCast.rotation_degrees >= 360:
 		WallCast.rotation_degrees = 0
-		
+	
 	while WallCast.rotation_degrees < 360:
 		WallCast.rotation_degrees += wall_check_gaps
 		
@@ -40,5 +40,5 @@ func check_for_walls() -> Array:
 		
 		if WallCast.is_colliding():
 			wall_positions.append(WallCast.get_collision_point())
-		
+	
 	return wall_positions

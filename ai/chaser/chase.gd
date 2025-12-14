@@ -23,6 +23,12 @@ var body_position : Vector2
 var body_rotation : float
 var body_gravity : Vector2
 
+var detected_walls := []
+var closest_wall_to_player : Vector2
+
+var awaiting_jump := false
+var jump_target : Vector2
+
 
 func on_enter() -> void:
 	RollTimer.wait_time = roll_timer_length
@@ -41,28 +47,36 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	update_positions() #Will update this so it doesn't have to run every frame
+	jump_target = closest_wall_to_player
+	awaiting_jump = true
 	
-	if Owner.recent_direction == direction and Owner.recent_jump == jump:
-		return
+	print(body_position)
+	
+	if awaiting_jump:
+		jump_towards_point(jump_target)
 	
 	Owner.send_input(direction, jump)
 
 func roll_towards_player():
-	closest_wall_to_player()
+	update_positions()
 	if position_to_player.x > still_range:
 		direction = left_input
 	elif position_to_player.x < -still_range:
 		direction = right_input
 
-func jump_towards_player() -> void:
-	jump_on_rotation(abs(degrees_to_player), (still_range * 10))
+func jump_towards_point(point : Vector2) -> void:
+	var degrees_to_point := rad_to_deg((point - body_position).angle())
+	var distance_to_point := body_position.distance_to(point)
+	
+	#Need to account for gravity here, and get it to jump properly
+	
+	
+	jump_on_rotation(degrees_to_point, 1) #Not accurate
 
 func jump_on_rotation(degrees, degree_range) -> void:
+	update_positions()
 	if abs(body_rotation - degrees) <= degree_range:
 		jump = true
-		print(degrees_to_player)
-		print(body_rotation)
 	else:
 		jump = false
 	
@@ -78,23 +92,23 @@ func update_positions() -> void:
 	angle_to_player = position_to_player.angle()
 	degrees_to_player = rad_to_deg(angle_to_player)
 
-func closest_wall_to_player() -> float:
+func wall_check() -> void:
 	update_positions()
-	var detected_walls = await Owner.check_for_walls()
+	detected_walls = await Owner.check_for_walls()
+	
+	if detected_walls.size() == 0:
+		push_error("No walls detected by Chaser")
+		
 	var closest_wall = detected_walls[0]
 	
 	for wall in detected_walls:
 		if wall.distance_squared_to(player_position) < closest_wall.distance_squared_to(player_position):
 			closest_wall = wall
 	
-	var degrees_to_closest_wall := rad_to_deg((closest_wall - body_position).angle())
-	
-	return degrees_to_closest_wall
+	closest_wall_to_player = closest_wall
 	
 func _on_roll_timer_timeout() -> void:
-	if not active:
-		return
-	
 	roll_towards_player()
+	wall_check()
 	
 	RollTimer.start()

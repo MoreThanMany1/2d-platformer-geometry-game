@@ -86,9 +86,6 @@ rotation = 0.7853982
 exclude_parent = false
 target_position = Vector2(0, 22.5)
 
-[node name="WallCast" type="RayCast2D" parent="."]
-target_position = Vector2(0, -500)
-
 [node name="ChaserStateMachine" type="Node" parent="." node_paths=PackedStringArray("StateTimer", "ChaserBody", "Owner", "StartingState")]
 script = ExtResource("3_t30d3")
 StateTimer = NodePath("StateTimer")
@@ -122,6 +119,9 @@ one_shot = true
 
 [node name="StateTimer" type="Timer" parent="ChaserStateMachine"]
 autostart = true
+
+[node name="WallCast" type="RayCast2D" parent="."]
+target_position = Vector2(0, -600)
 
 [connection signal="timeout" from="ChaserStateMachine/Chase/RollTimer" to="ChaserStateMachine/Chase" method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="ChaserStateMachine/Random/RandomTimer" to="ChaserStateMachine/Random" method="_on_timer_timeout"]
