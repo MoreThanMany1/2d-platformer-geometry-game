@@ -12,11 +12,11 @@ size = Vector2(96, 96)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
 
-[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "ChaserStateMachine")]
+[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "StateMachine")]
 script = ExtResource("1_nw1ig")
 ChaserBody = NodePath("ChaserBody")
 WallCast = NodePath("WallCast")
-ChaserStateMachine = NodePath("ChaserStateMachine")
+StateMachine = NodePath("ChaserStateMachine")
 
 [node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
 collision_layer = 2

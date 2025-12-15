@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 	if awaiting_jump:
 		jump_towards_point(jump_target)
 	
-	Owner.send_input(direction, jump)
+	send_input()
 
 func roll_towards_player():
 	update_positions()

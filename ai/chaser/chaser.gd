@@ -3,6 +3,7 @@ extends Node2D
 @export_group("Nodes")
 @export var ChaserBody : RigidBody2D
 @export var WallCast : RayCast2D
+@export var ChaserStateMachine : StateMachine
 
 #Wall Detecting Raycast
 var checking_for_walls := false
@@ -16,9 +17,11 @@ var recent_jump := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	for state in ChaserStateMachine.get_children():
+		if state is ChaserState:	
+			state.input.connect(_on_state_input)
 
-func send_input(direction : Vector2, jump : bool):
+func _on_state_input(direction : Vector2, jump : bool):
 	ChaserBody.input_left = direction.x
 	ChaserBody.input_right = direction.y
 	ChaserBody.input_jump = jump

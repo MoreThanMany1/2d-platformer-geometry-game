@@ -12,7 +12,7 @@ func _process(delta: float) -> void:
 	if Owner.recent_direction == direction and Owner.recent_jump == jump:
 		return
 	
-	Owner.send_input(direction, jump)
+	send_input()
 
 func randomize_input():
 	if rng() < 0.8:
@@ -23,7 +23,7 @@ func randomize_input():
 	if jump:
 		return
 	
-	if rng_boolean():
+	if rng() < 0.5:
 		direction = left_input
 	else:
 		direction = right_input
