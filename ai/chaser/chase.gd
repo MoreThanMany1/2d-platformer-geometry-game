@@ -47,10 +47,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	jump_target = closest_wall_to_player
+	jump_target = player_position
 	awaiting_jump = true
-	
-	print(body_position)
 	
 	if awaiting_jump:
 		jump_towards_point(jump_target)
@@ -66,12 +64,14 @@ func roll_towards_player():
 
 func jump_towards_point(point : Vector2) -> void:
 	var degrees_to_point := rad_to_deg((point - body_position).angle())
+	degrees_to_point = abs(degrees_to_point) #Note to self, maybe remove this if needed for gravity compensation
+	
 	var distance_to_point := body_position.distance_to(point)
 	
-	#Need to account for gravity here, and get it to jump properly
+	if distance_to_point >= 550:
+		return
 	
-	
-	jump_on_rotation(degrees_to_point, 1) #Not accurate
+	jump_on_rotation(-degrees_to_point, 1) #Not accurate
 
 func jump_on_rotation(degrees, degree_range) -> void:
 	update_positions()
