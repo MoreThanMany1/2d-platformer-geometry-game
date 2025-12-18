@@ -67,25 +67,25 @@ target_position = Vector2(0, -72)
 position = Vector2(-46.5, -46.5)
 rotation = 2.3561945
 exclude_parent = false
-target_position = Vector2(0, 22.5)
+target_position = Vector2(0, 64)
 
 [node name="RayCast2D2" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, -46.5)
 rotation = -2.3561945
 exclude_parent = false
-target_position = Vector2(0, 22.5)
+target_position = Vector2(0, 64)
 
 [node name="RayCast2D3" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, 46.5)
 rotation = -0.7853982
 exclude_parent = false
-target_position = Vector2(0, 22.5)
+target_position = Vector2(0, 64)
 
 [node name="RayCast2D4" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(-46.5, 46.5)
 rotation = 0.7853982
 exclude_parent = false
-target_position = Vector2(0, 22.5)
+target_position = Vector2(0, 64)
 
 [node name="ChaserStateMachine" type="Node" parent="." node_paths=PackedStringArray("StateTimer", "ChaserBody", "Owner", "StartingState")]
 script = ExtResource("3_t30d3")
@@ -103,6 +103,13 @@ metadata/_custom_type_script = "uid://32cm8jv18418"
 script = ExtResource("5_t30d3")
 ChaserBody = NodePath("../../ChaserBody")
 RollTimer = NodePath("RollTimer")
+roll_timer_length = null
+still_range = null
+direction = null
+jump = null
+right_input = null
+left_input = null
+active = null
 metadata/_custom_type_script = "uid://32cm8jv18418"
 
 [node name="RollTimer" type="Timer" parent="ChaserStateMachine/Chase"]

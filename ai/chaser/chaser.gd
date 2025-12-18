@@ -5,18 +5,35 @@ extends Node2D
 @export var WallCast : RayCast2D
 @export var ChaserStateMachine : StateMachine
 
+var recent_direction := Vector2.ZERO
+var recent_jump := false
+
+#Player tracking
+var Player : RigidBody2D
+var player_position : Vector2
+var player_gravity : Vector2
+var position_to_player : Vector2
+var angle_to_player : float
+var degrees_to_player : float
+
+#Chaser body tracking
+var body_position : Vector2
+var body_rotation : float
+var body_gravity : Vector2
+
 #Wall Detecting Raycast
 var checking_for_walls := false
 var wall_check_gaps := 18
+var detected_walls := []
 
 var wall_positions := []
-
-var recent_direction := Vector2.ZERO
-var recent_jump := false
+var closest_wall_to_player : Vector2
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Player = get_tree().get_first_node_in_group("player")
+	
 	for state in ChaserStateMachine.get_children():
 		if state is ChaserState:	
 			state.input.connect(_on_state_input)
@@ -29,7 +46,7 @@ func _on_state_input(direction : Vector2, jump : bool):
 	recent_direction = direction
 	recent_jump = jump
 
-func check_for_walls() -> Array:
+func check_for_walls() -> void:
 	wall_positions = []
 	WallCast.global_position = ChaserBody.global_position
 	
@@ -44,4 +61,44 @@ func check_for_walls() -> Array:
 		if WallCast.is_colliding():
 			wall_positions.append(WallCast.get_collision_point())
 	
-	return wall_positions
+	if wall_positions.size() > 0:
+		detected_walls = wall_positions
+
+func find_wall_closest_to(point):
+	var closest_wall = detected_walls[0]
+	
+	for wall in detected_walls:
+		if wall.distance_squared_to(point) < closest_wall.distance_squared_to(point):
+			closest_wall = wall
+	
+	return closest_wall
+
+func jump_towards_point(point : Vector2) -> void:
+	var degrees_to_point := rad_to_deg((point - body_position).angle())
+	degrees_to_point = abs(degrees_to_point) #Note to self, maybe remove this if needed for gravity compensation
+	
+	var distance_to_point := body_position.distance_to(point)
+	
+	if distance_to_point >= 550:
+		return
+	
+	jump_on_rotation(-degrees_to_point, 1) #Not accurate
+
+func jump_on_rotation(degrees, degree_range) -> bool:
+	if abs(body_rotation - degrees) <= degree_range:
+		return true
+	else:
+		return false
+
+
+func update_positions() -> void:
+	body_position = ChaserBody.global_position
+	body_rotation = ChaserBody.rotation_degrees
+	body_gravity = ChaserBody.gravity_direction
+	
+	player_position = Player.global_position
+	player_gravity = Player.gravity_direction
+	
+	position_to_player = player_position - body_position
+	angle_to_player = position_to_player.angle()
+	degrees_to_player = rad_to_deg(angle_to_player)
