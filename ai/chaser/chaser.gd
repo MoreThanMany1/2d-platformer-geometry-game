@@ -8,6 +8,9 @@ extends Node2D
 var recent_direction := Vector2.ZERO
 var recent_jump := false
 
+var awaiting_jump := false
+var jump_target : Vector2
+
 #Player tracking
 var Player : RigidBody2D
 var player_position : Vector2
@@ -36,14 +39,35 @@ func _ready() -> void:
 	
 	for state in ChaserStateMachine.get_children():
 		if state is ChaserState:	
-			state.input.connect(_on_state_input)
+			state.input.connect(send_input)
+	
+	detected_walls.append(Vector2.ZERO)
 
-func _on_state_input(direction : Vector2, jump : bool):
+func _physics_process(delta: float) -> void:
+	update_positions()
+	
+	awaiting_jump = true
+	jump_target = player_position
+	
+	if awaiting_jump:
+		jump_towards_point(jump_target)
+	
+
+func send_input(direction : Vector2, jump : bool):
 	ChaserBody.input_left = direction.x
 	ChaserBody.input_right = direction.y
 	ChaserBody.input_jump = jump
 	
 	recent_direction = direction
+	recent_jump = jump
+
+func send_movement(direction : Vector2):
+	ChaserBody.input_left = direction.x
+	ChaserBody.input_right = direction.y
+	recent_direction = direction
+
+func send_jump(jump : bool):
+	ChaserBody.input_jump = jump
 	recent_jump = jump
 
 func check_for_walls() -> void:
@@ -79,15 +103,18 @@ func jump_towards_point(point : Vector2) -> void:
 	
 	var distance_to_point := body_position.distance_to(point)
 	
-	if distance_to_point >= 550:
+	if distance_to_point >= 750:
 		return
 	
-	jump_on_rotation(-degrees_to_point, 1) #Not accurate
+	jump_on_rotation(-degrees_to_point, 1) 
 
 func jump_on_rotation(degrees, degree_range) -> bool:
 	if abs(body_rotation - degrees) <= degree_range:
+		send_jump(true)
+		awaiting_jump = false
 		return true
 	else:
+		send_jump(false)
 		return false
 
 
