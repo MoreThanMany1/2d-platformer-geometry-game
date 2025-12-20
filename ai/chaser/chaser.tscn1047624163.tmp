@@ -122,7 +122,7 @@ one_shot = true
 autostart = true
 
 [node name="WallCast" type="RayCast2D" parent="."]
-target_position = Vector2(-1300, 0)
+target_position = Vector2(0, -600)
 
 [connection signal="timeout" from="ChaserStateMachine/Chase/RollTimer" to="ChaserStateMachine/Chase" method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="ChaserStateMachine/Random/RandomTimer" to="ChaserStateMachine/Random" method="_on_timer_timeout"]

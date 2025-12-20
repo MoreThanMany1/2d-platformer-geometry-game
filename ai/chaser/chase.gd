@@ -12,6 +12,8 @@ var roll_timer_length := starting_roll_timer_length
 
 @export_group("Tracking")
 @export var still_range := 0.5
+@export var player_high_speed := 250.0
+@export var dont_jump_min := 700.0
 
 var last_distance_to_player : float
 
@@ -23,15 +25,12 @@ func on_enter() -> void:
 func on_exit() -> void:
 	RollTimer.stop()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	send_input()
 
-func roll_towards_player():
+func roll_towards_player(): #If this is called more often, adjust roll_timer_close_gap_min to be smaller
 	var distance_to_player = Owner.body_position.distance_to(Owner.player_position)
 	var force_same_direction : bool
-
-	print(last_distance_to_player - distance_to_player)
 	
 	if last_distance_to_player - distance_to_player < roll_timer_gap_close_min:
 		roll_timer_length += randf_range(roll_timer_extension_range.x, roll_timer_extension_range.y)
@@ -50,12 +49,28 @@ func roll_towards_player():
 	elif Owner.position_to_player.x < -still_range:
 		direction = right_input
 	
-	#Update this to account for y values... go for 
+	#Update this to account for y values
+
+func determine_awaiting_jump() -> void:
+	if Owner.body_position.distance_to(Owner.player_position) > dont_jump_min:
+		Owner.awaiting_jump = false
+		return
+	
+	if Owner.player_velocity.length() > 250:
+		Owner.awaiting_jump = true
+		return
+		
+	if Owner.body_gravity != Vector2.DOWN:
+		Owner.awaiting_jump = false
+		return
+	
+	if Owner.body_position.distance_to(Owner.player_position) < dont_jump_min:
+		Owner.jump_target = Owner.player_position
+		Owner.awaiting_jump = true
+		return
 	
 func _on_roll_timer_timeout() -> void:
 	roll_towards_player()
+	determine_awaiting_jump()
 	
 	RollTimer.start(roll_timer_length)
-	
-	
-	

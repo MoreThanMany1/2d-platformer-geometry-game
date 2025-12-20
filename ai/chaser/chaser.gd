@@ -15,6 +15,7 @@ var jump_target : Vector2
 var Player : RigidBody2D
 var player_position : Vector2
 var player_gravity : Vector2
+var player_velocity : Vector2
 var position_to_player : Vector2
 var angle_to_player : float
 var degrees_to_player : float
@@ -28,9 +29,10 @@ var body_gravity : Vector2
 var checking_for_walls := false
 var wall_check_gaps := 18
 var detected_walls := []
-
-var wall_positions := []
-var closest_wall_to_player : Vector2
+var wall_up : bool
+var wall_down : bool
+var wall_left : bool
+var wall_right : bool
 
 
 # Called when the node enters the scene tree for the first time.
@@ -43,11 +45,8 @@ func _ready() -> void:
 	
 	detected_walls.append(Vector2.ZERO)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	update_positions()
-	
-	awaiting_jump = true
-	jump_target = player_position
 	
 	if awaiting_jump:
 		jump_towards_point(jump_target)
@@ -70,23 +69,36 @@ func send_jump(jump : bool):
 	ChaserBody.input_jump = jump
 	recent_jump = jump
 
-func check_for_walls() -> void:
+func check_for_walls(central_position) -> void:
+	var wall_positions := []
+	var recent_detection : bool
+	
 	wall_positions = []
-	WallCast.global_position = ChaserBody.global_position
+	WallCast.global_position = central_position
 	
-	if WallCast.rotation_degrees >= 360:
-		WallCast.rotation_degrees = 0
-	
-	while WallCast.rotation_degrees < 360:
-		WallCast.rotation_degrees += wall_check_gaps
-		
-		await get_tree().process_frame
+	for angle in range(0.0, 360.0, wall_check_gaps):
+		WallCast.rotation_degrees = angle
 		
 		if WallCast.is_colliding():
+			recent_detection = true
 			wall_positions.append(WallCast.get_collision_point())
+		else:
+			recent_detection = false
+		
+		match angle:
+			0.0:
+				wall_right = recent_detection
+			90.0:
+				wall_up = recent_detection
+			180.0:
+				wall_left = recent_detection
+			270.0:
+				wall_down = recent_detection
+		
+	if wall_positions.size() == 0:
+		push_warning("No walls detected by Chaser")
 	
-	if wall_positions.size() > 0:
-		detected_walls = wall_positions
+	detected_walls = wall_positions
 
 func find_wall_closest_to(point):
 	var closest_wall = detected_walls[0]
@@ -125,6 +137,7 @@ func update_positions() -> void:
 	
 	player_position = Player.global_position
 	player_gravity = Player.gravity_direction
+	player_velocity = Player.linear_velocity
 	
 	position_to_player = player_position - body_position
 	angle_to_player = position_to_player.angle()

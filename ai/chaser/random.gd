@@ -8,7 +8,7 @@ func on_enter() -> void:
 func on_exit() -> void:
 	RandomTimer.stop()
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Owner.recent_direction == direction and Owner.recent_jump == jump:
 		return
 	

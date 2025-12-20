@@ -177,4 +177,4 @@ position = Vector2(-634, 457)
 mass = 0.15
 
 [node name="Chaser" parent="." instance=ExtResource("3_0nd0b")]
-position = Vector2(-1113, -188.99998)
+position = Vector2(-1724, -168)
