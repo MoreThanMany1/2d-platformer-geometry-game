@@ -57,6 +57,7 @@ func determine_awaiting_jump() -> void:
 		return
 	
 	if Owner.player_velocity.length() > 250:
+		Owner.jump_target = Owner.player_position
 		Owner.awaiting_jump = true
 		return
 		
