@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://c02nb3rq4dxlc"]
+[gd_scene load_steps=11 format=3 uid="uid://c02nb3rq4dxlc"]
 
 [ext_resource type="Script" uid="uid://rvkr7ppvyq4k" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
 [ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser_body.gd" id="2_ewd13"]
 [ext_resource type="Script" uid="uid://buj63ksrxgxyf" path="res://ai/chaser/chaser_state_machine.gd" id="3_t30d3"]
+[ext_resource type="Script" uid="uid://c6qvlhmr82tf4" path="res://ai/chaser/stats_text.gd" id="3_y17h6"]
 [ext_resource type="Script" uid="uid://rktfck0p8plo" path="res://ai/chaser/idle.gd" id="4_a67ss"]
 [ext_resource type="Script" uid="uid://ca06af4hk51v5" path="res://ai/chaser/chase.gd" id="5_t30d3"]
 [ext_resource type="Script" uid="uid://c8vti6k5v4kb1" path="res://ai/chaser/random.gd" id="6_0cdvt"]
@@ -87,6 +88,20 @@ position = Vector2(-46.5, 46.5)
 rotation = 0.7853982
 exclude_parent = false
 target_position = Vector2(0, 96)
+
+[node name="StatsText" type="RichTextLabel" parent="ChaserBody" node_paths=PackedStringArray("Owner")]
+offset_left = -350.0
+offset_top = -412.0
+offset_right = 323.0
+offset_bottom = -48.0
+theme_override_font_sizes/normal_font_size = 48
+text = "Placeholder
+Placeholder"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("3_y17h6")
+Owner = NodePath("../..")
 
 [node name="ChaserStateMachine" type="Node" parent="." node_paths=PackedStringArray("StateTimer", "ChaserBody", "Owner", "StartingState")]
 script = ExtResource("3_t30d3")

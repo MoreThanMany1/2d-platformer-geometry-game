@@ -52,11 +52,14 @@ func roll_towards_player(): #If this is called more often, adjust roll_timer_clo
 	#Update this to account for y values
 
 func determine_awaiting_jump() -> void:
+	var min_player_velocity_for_jump := 700
+	var max_y_value_diff_for_jump := 50
+	
 	if Owner.body_position.distance_to(Owner.player_position) > dont_jump_min:
 		Owner.awaiting_jump = false
 		return
 	
-	if Owner.player_velocity.length() > 250:
+	if Owner.player_velocity.length() > min_player_velocity_for_jump:
 		Owner.jump_target = Owner.player_position
 		Owner.awaiting_jump = true
 		return
@@ -64,6 +67,11 @@ func determine_awaiting_jump() -> void:
 	if Owner.body_gravity != Vector2.DOWN:
 		Owner.awaiting_jump = false
 		return
+	
+	if abs(Owner.body_position.y - Owner.player_position.y) > max_y_value_diff_for_jump:
+		if rng() > 0.8:
+			Owner.awaiting_jump = false
+			return
 	
 	if Owner.body_position.distance_to(Owner.player_position) < dont_jump_min:
 		Owner.jump_target = Owner.player_position

@@ -10,6 +10,7 @@ var recent_jump := false
 
 var awaiting_jump := false
 var jump_target : Vector2
+var recent_rotation_for_jump : float
 
 #Player tracking
 var Player : RigidBody2D
@@ -121,6 +122,8 @@ func jump_towards_point(point : Vector2) -> void:
 	jump_on_rotation(-degrees_to_point, 1) 
 
 func jump_on_rotation(degrees, degree_range) -> bool:
+	recent_rotation_for_jump = degrees
+	
 	if abs(body_rotation - degrees) <= degree_range:
 		send_jump(true)
 		awaiting_jump = false
@@ -142,3 +145,5 @@ func update_positions() -> void:
 	position_to_player = player_position - body_position
 	angle_to_player = position_to_player.angle()
 	degrees_to_player = rad_to_deg(angle_to_player)
+	
+	
