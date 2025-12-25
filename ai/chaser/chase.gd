@@ -5,7 +5,7 @@ extends ChaserState
 
 @export_group("Timers")
 @export var RollTimer : Timer
-@export var starting_roll_timer_length := 0.5
+@export var starting_roll_timer_length := 0.3
 @export var roll_timer_extension_range := Vector2(0.5, 2.5)
 @export var roll_timer_gap_close_min := 60.0
 var roll_timer_length := starting_roll_timer_length
