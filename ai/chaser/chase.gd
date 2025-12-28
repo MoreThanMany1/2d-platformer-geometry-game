@@ -55,7 +55,7 @@ func determine_awaiting_jump() -> void:
 	var min_player_velocity_for_jump := 700
 	var max_y_value_diff_for_jump := 50
 	
-	if Owner.body_position.distance_to(Owner.player_position) > dont_jump_min:
+	if Owner.body_position.distance_to(Owner.player_position) > dont_jump_min and Owner.wall_to_player:
 		Owner.awaiting_jump = false
 		return
 	

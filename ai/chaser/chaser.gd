@@ -3,6 +3,7 @@ extends Node2D
 @export_group("Nodes")
 @export var ChaserBody : RigidBody2D
 @export var WallCast : RayCast2D
+@export var ToPlayerCast : RayCast2D
 @export var ChaserStateMachine : StateMachine
 
 var recent_direction := Vector2.ZERO
@@ -20,6 +21,7 @@ var player_velocity : Vector2
 var position_to_player : Vector2
 var angle_to_player : float
 var degrees_to_player : float
+var wall_to_player : bool
 
 #Chaser body tracking
 var body_position : Vector2
@@ -141,9 +143,18 @@ func update_positions() -> void:
 	player_position = Player.global_position
 	player_gravity = Player.gravity_direction
 	player_velocity = Player.linear_velocity
-	
+		
 	position_to_player = player_position - body_position
 	angle_to_player = position_to_player.angle()
 	degrees_to_player = rad_to_deg(angle_to_player)
+	
+	wall_to_player = check_for_wall_to_player()
+
+func check_for_wall_to_player() -> bool:
+	ToPlayerCast.global_position = ChaserBody.global_position
+	ToPlayerCast.target_position = position_to_player
+	
+	return ToPlayerCast.is_colliding()
+	
 	
 	

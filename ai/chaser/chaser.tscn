@@ -14,10 +14,11 @@ size = Vector2(96, 96)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
 
-[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "ChaserStateMachine")]
+[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "ToPlayerCast", "ChaserStateMachine")]
 script = ExtResource("1_nw1ig")
 ChaserBody = NodePath("ChaserBody")
 WallCast = NodePath("WallCast")
+ToPlayerCast = NodePath("ToPlayerCast")
 ChaserStateMachine = NodePath("ChaserStateMachine")
 
 [node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
@@ -143,6 +144,8 @@ metadata/_custom_type_script = "uid://32cm8jv18418"
 
 [node name="WallCast" type="RayCast2D" parent="."]
 target_position = Vector2(-1300, 0)
+
+[node name="ToPlayerCast" type="RayCast2D" parent="."]
 
 [connection signal="timeout" from="ChaserStateMachine/Chase/RollTimer" to="ChaserStateMachine/Chase" method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="ChaserStateMachine/Random/RandomTimer" to="ChaserStateMachine/Random" method="_on_timer_timeout"]
