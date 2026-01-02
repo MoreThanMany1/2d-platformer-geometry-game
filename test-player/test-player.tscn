@@ -24,6 +24,7 @@ scale = Vector2(64, 64)
 texture = SubResource("CanvasTexture_tmtbt")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.4, 0.4)
 
 [node name="Center" type="Node2D" parent="."]
 

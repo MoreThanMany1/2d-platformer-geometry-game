@@ -2,23 +2,21 @@ extends RigidBody2D
 
 @export_group("Nodes")
 @export var Center : Node2D
-@onready var ground_raycasts = get_node("GroundRaycasts")
-
-@export_group("Groups")
-@export var player_group := "player"
+@export var GroundRaycasts : Node2D
 
 @export_group("Input")
-@export var input_left := "move_left"
-@export var input_right := "move_right"
-@export var input_jump := "move_jump"
+@export var input_left := 0.0
+@export var input_right := 0.0
+@export var input_direction_multiplier := 3.0
+@export var input_jump := false
 
-@export_group("Player Movement")
+@export_group("Chaser Movement")
 @export var base_torque := 9000.0
 @export var jump_height := 900.0
 @export var jump_length := 900.0
 @export var input_direction_pull := 0.5
 
-@export_group("Player Abilities")
+@export_group("Chaser Abilities")
 @export var frozen := false
 @export var can_move := true
 @export var can_jump := true
@@ -40,8 +38,6 @@ var corners := []
 var raycasts := []
 
 func _ready():
-	add_to_group(player_group)
-	
 	for child in Center.get_children():
 		if child is RayCast2D:
 			raycasts.append(child)
@@ -52,12 +48,12 @@ func _physics_process(_delta: float) -> void:
 	if not can_move:
 		return
 	
-	input_direction = Input.get_axis(input_left, input_right)
+	input_direction = (input_left - input_right) * input_direction_multiplier
 	current_torque = lerp(current_torque, input_direction * base_torque, input_direction_pull)
 	
 	stick()
 	
-	if Input.is_action_just_pressed(input_jump) && on_ground():
+	if input_jump and on_ground():
 		jump()
 
 func _integrate_forces(state):
@@ -72,10 +68,10 @@ func jump() -> void:
 	if not can_jump:
 		return
 	
-	var highest_corner_position = Vector2(Center.global_position.x, Center.global_position.y - 32)
+	var highest_corner_position = Vector2(Center.global_position.x, Center.global_position.y - 48)
 	
 	for corner in corners:
-		if abs(corner.global_position.y - (Center.global_position.y - 32)) < 1.0:
+		if abs(corner.global_position.y - (Center.global_position.y - 48)) < 1.0:
 			pass
 		elif corner.global_position.y < highest_corner_position.y:
 			highest_corner_position = corner.global_position
@@ -86,11 +82,11 @@ func jump() -> void:
 	linear_velocity.x = direction_to_corner.x * jump_length
 	linear_velocity.y = direction_to_corner.y * jump_height
 	
-	await get_tree().create_timer(0.05).timeout
-	gravity_change(Vector2.DOWN)
 
 func stick() -> void:
 	if not on_ground():
+		if gravity_direction != Vector2.DOWN:
+			gravity_change(Vector2.DOWN)
 		return
 	for raycast in raycasts:
 		if raycast.is_colliding():
@@ -110,9 +106,7 @@ func gravity_change(stick_direction : Vector2) -> void:
 	gravity_angle = gravity_direction.angle() - deg_to_rad(90)
 
 func on_ground() -> bool:
-	for ray in ground_raycasts.get_children():
+	for ray in GroundRaycasts.get_children():
 		if ray.is_colliding():
 			return true
 	return false
-	
-	

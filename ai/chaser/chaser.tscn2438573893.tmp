@@ -1,25 +1,22 @@
-[gd_scene load_steps=11 format=3 uid="uid://c02nb3rq4dxlc"]
+[gd_scene load_steps=9 format=3 uid="uid://c02nb3rq4dxlc"]
 
 [ext_resource type="Script" uid="uid://rvkr7ppvyq4k" path="res://ai/chaser/chaser.gd" id="1_nw1ig"]
 [ext_resource type="Script" uid="uid://bsjuhivc7pc7o" path="res://ai/chaser/chaser_body.gd" id="2_ewd13"]
 [ext_resource type="Script" uid="uid://buj63ksrxgxyf" path="res://ai/chaser/chaser_state_machine.gd" id="3_t30d3"]
-[ext_resource type="Script" uid="uid://c6qvlhmr82tf4" path="res://ai/chaser/stats_text.gd" id="3_y17h6"]
 [ext_resource type="Script" uid="uid://rktfck0p8plo" path="res://ai/chaser/idle.gd" id="4_a67ss"]
 [ext_resource type="Script" uid="uid://ca06af4hk51v5" path="res://ai/chaser/chase.gd" id="5_t30d3"]
 [ext_resource type="Script" uid="uid://c8vti6k5v4kb1" path="res://ai/chaser/random.gd" id="6_0cdvt"]
-[ext_resource type="Script" uid="uid://bsjn6cg3i5v4u" path="res://ai/chaser/controller.gd" id="7_0cdvt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewd13"]
 size = Vector2(96, 96)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tbp63"]
 
-[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "ToPlayerCast", "ChaserStateMachine")]
+[node name="Chaser" type="Node2D" node_paths=PackedStringArray("ChaserBody", "WallCast", "StateMachine")]
 script = ExtResource("1_nw1ig")
 ChaserBody = NodePath("ChaserBody")
 WallCast = NodePath("WallCast")
-ToPlayerCast = NodePath("ToPlayerCast")
-ChaserStateMachine = NodePath("ChaserStateMachine")
+StateMachine = NodePath("ChaserStateMachine")
 
 [node name="ChaserBody" type="RigidBody2D" parent="." node_paths=PackedStringArray("Center", "GroundRaycasts")]
 collision_layer = 2
@@ -70,39 +67,25 @@ target_position = Vector2(0, -72)
 position = Vector2(-46.5, -46.5)
 rotation = 2.3561945
 exclude_parent = false
-target_position = Vector2(0, 96)
+target_position = Vector2(0, 22.5)
 
 [node name="RayCast2D2" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, -46.5)
 rotation = -2.3561945
 exclude_parent = false
-target_position = Vector2(0, 96)
+target_position = Vector2(0, 22.5)
 
 [node name="RayCast2D3" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(46.5, 46.5)
 rotation = -0.7853982
 exclude_parent = false
-target_position = Vector2(0, 96)
+target_position = Vector2(0, 22.5)
 
 [node name="RayCast2D4" type="RayCast2D" parent="ChaserBody/GroundRaycasts"]
 position = Vector2(-46.5, 46.5)
 rotation = 0.7853982
 exclude_parent = false
-target_position = Vector2(0, 96)
-
-[node name="StatsText" type="RichTextLabel" parent="ChaserBody" node_paths=PackedStringArray("Owner")]
-offset_left = -350.0
-offset_top = -412.0
-offset_right = 323.0
-offset_bottom = -48.0
-theme_override_font_sizes/normal_font_size = 48
-text = "Placeholder
-Placeholder"
-scroll_active = false
-horizontal_alignment = 1
-vertical_alignment = 2
-script = ExtResource("3_y17h6")
-Owner = NodePath("../..")
+target_position = Vector2(0, 22.5)
 
 [node name="ChaserStateMachine" type="Node" parent="." node_paths=PackedStringArray("StateTimer", "ChaserBody", "Owner", "StartingState")]
 script = ExtResource("3_t30d3")
@@ -138,14 +121,8 @@ one_shot = true
 [node name="StateTimer" type="Timer" parent="ChaserStateMachine"]
 autostart = true
 
-[node name="Controller" type="Node" parent="ChaserStateMachine"]
-script = ExtResource("7_0cdvt")
-metadata/_custom_type_script = "uid://32cm8jv18418"
-
 [node name="WallCast" type="RayCast2D" parent="."]
-target_position = Vector2(-1300, 0)
-
-[node name="ToPlayerCast" type="RayCast2D" parent="."]
+target_position = Vector2(0, -600)
 
 [connection signal="timeout" from="ChaserStateMachine/Chase/RollTimer" to="ChaserStateMachine/Chase" method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="ChaserStateMachine/Random/RandomTimer" to="ChaserStateMachine/Random" method="_on_timer_timeout"]
