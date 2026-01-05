@@ -32,10 +32,7 @@ var body_gravity : Vector2
 var checking_for_walls := false
 var wall_check_gaps := 18
 var detected_walls := []
-var wall_up : bool
-var wall_down : bool
-var wall_left : bool
-var wall_right : bool
+var max_slides := 6
 
 
 # Called when the node enters the scene tree for the first time.
@@ -72,7 +69,12 @@ func send_jump(jump : bool):
 	ChaserBody.input_jump = jump
 	recent_jump = jump
 
-func check_for_walls(central_position) -> void:
+func check_for_walls(central_position) -> Dictionary:
+	var wall_up : bool
+	var wall_down : bool
+	var wall_left : bool
+	var wall_right : bool
+	
 	var wall_positions := []
 	var recent_detection : bool
 	
@@ -101,7 +103,14 @@ func check_for_walls(central_position) -> void:
 	if wall_positions.size() == 0:
 		push_warning("No walls detected by Chaser")
 	
-	detected_walls = wall_positions
+	var wall_check_dict := {
+		"wall_positions" : wall_positions,
+		"wall_up" : wall_up,
+		"wall_down" : wall_down,
+		"wall_left" : wall_left,
+		"wall_right" : wall_right
+	}
+	return wall_check_dict
 
 func find_wall_closest_to(point):
 	var closest_wall = detected_walls[0]
@@ -133,6 +142,20 @@ func jump_on_rotation(degrees, degree_range) -> bool:
 	else:
 		send_jump(false)
 		return false
+
+func slide_wallcast(start_position : Vector2, search_direction : Vector2) -> Array:
+	var slides := 0
+	var slide_data : Array
+	while slides < max_slides:
+		start_position += search_direction
+		slide_data.append(check_for_walls(start_position))
+	
+	return slide_data
+		
+	
+
+
+
 
 
 func update_positions() -> void:
